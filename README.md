@@ -1,14 +1,12 @@
 # URL Shortener
 
-![Java Version](https://img.shields.io/badge/Java-21+-blue)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.2-brightgreen)
-![MongoDB](https://img.shields.io/badge/MongoDB-8.0.4-blue)
+
+![Java](https://img.shields.io/badge/Java-21-blue?style=for-the-badge&logo=java)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3-green?style=for-the-badge&logo=springboot)
+![MongoDB](https://img.shields.io/badge/MongoDB-Database-brightgreen?style=for-the-badge&logo=mongodb)
 
 Este projeto é um encurtador de URLs desenvolvido com Spring Boot e MongoDB, baseado no desafio disponível em [backend-br/desafios. ](https://github.com/backend-br/desafios/blob/master/url-shortener/PROBLEM.md)
 
-![Java](https://img.shields.io/badge/Java-17-blue?style=for-the-badge&logo=java)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3-green?style=for-the-badge&logo=springboot)
-![MongoDB](https://img.shields.io/badge/MongoDB-Database-brightgreen?style=for-the-badge&logo=mongodb)
 
 ## 🚀 Tecnologias Utilizadas
 
@@ -24,34 +22,37 @@ Este projeto é um encurtador de URLs desenvolvido com Spring Boot e MongoDB, ba
 - Definir tempo de expiração para URLs
 - Remover URLs expiradas
 
-```
-
 ## 🔗 Endpoints
 
-### Criar uma URL encurtada
+### 📌 Criar uma URL encurtada
 
-**POST /shorten-url**
+- **Método:** `POST`
+- **Endpoint:** `/shorten-url`
+- **Corpo da requisição:**
 
-```json
-{
-  "url": "https://www.google.com"
-}
-```
+  ```json
+  {
+    "url": "https://www.google.com"
+  }
+  ```
 
-**Resposta:**
+- **Resposta:**
 
-```json
-{
-  "url": "http://localhost:8080/abc123"
-}
-```
+  ```json
+  {
+    "url": "http://localhost:8080/abc123"
+  }
+  ```
 
-### Redirecionar para a URL original
+### 🔄 Redirecionar para a URL original
 
-**GET /{shortUrl}**
+- **Método:** `GET`
+- **Endpoint:** `/{shortUrl}`
+- **Exemplo:** `GET http://localhost:8080/abc123`
+- **Resposta:** Redireciona para a URL longa original
 
-- Exemplo: `GET http://localhost:8080/abc123`
-- Resposta: Redireciona para a URL longa original
+
+
 
 
 
