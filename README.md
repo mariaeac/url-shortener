@@ -50,7 +50,7 @@ Este projeto é um encurtador de URLs desenvolvido com Spring Boot e MongoDB, ba
 ### 🔄 Redirecionar para a URL original
 
 - **Método:** `GET`
-- **Endpoint:** `/{shortUrl}`
+- **Endpoint:** `/api/{shortUrl}`
 - **Exemplo:** `GET http://localhost:8080/abc123`
 - **Resposta:** Redireciona para a URL longa original
 
