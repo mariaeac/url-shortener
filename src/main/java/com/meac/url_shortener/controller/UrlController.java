@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
+@RequestMapping("/api")
 public class UrlController {
 
     private final UrlServices urlServices;
@@ -26,7 +27,7 @@ public class UrlController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Void> redirect(@PathVariable String id) {
         var url = urlServices.getOriginUrl(id);
         HttpHeaders headers = new HttpHeaders();

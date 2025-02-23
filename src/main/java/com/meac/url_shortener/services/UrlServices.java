@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -22,6 +23,7 @@ public class UrlServices {
     }
 
     public UrlResponse urlShortenerGenerate(UrlRequest urlRequest, HttpServletRequest httpServletRequest) {
+
        String urlId;
         do {
             urlId = RandomStringUtils.randomAlphanumeric(5, 10);
