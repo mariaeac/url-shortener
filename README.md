@@ -30,7 +30,7 @@ Este projeto é um encurtador de URLs desenvolvido com Spring Boot e MongoDB, ba
 ### 📌 Criar uma URL encurtada
 
 - **Método:** `POST`
-- **Endpoint:** `/shorten-url`
+- **Endpoint:** `/api/shorten-url`
 - **Corpo da requisição:**
 
   ```json
