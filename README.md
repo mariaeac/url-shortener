@@ -7,6 +7,9 @@
 
 Este projeto é um encurtador de URLs desenvolvido com Spring Boot e MongoDB, baseado no desafio disponível em [backend-br/desafios. ](https://github.com/backend-br/desafios/blob/master/url-shortener/PROBLEM.md)
 
+![image](https://github.com/user-attachments/assets/1c12f568-3858-4fc5-a696-92b37e7e0a45)
+
+
 
 ## 🚀 Tecnologias Utilizadas
 
