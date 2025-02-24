@@ -1,9 +1,11 @@
 package com.meac.url_shortener.controller;
 
+import com.meac.url_shortener.entities.Url;
 import com.meac.url_shortener.entities.dtos.UrlRequest;
 import com.meac.url_shortener.entities.dtos.UrlResponse;
 import com.meac.url_shortener.services.UrlServices;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,16 +24,16 @@ public class UrlController {
     }
 
     @PostMapping("/shorten-url")
-    public ResponseEntity<UrlResponse> shortenUrl(@RequestBody UrlRequest urlRequest, HttpServletRequest request) {
+    public ResponseEntity<UrlResponse> shortenUrl(@Valid @RequestBody UrlRequest urlRequest, HttpServletRequest request) {
         UrlResponse response = urlServices.urlShortenerGenerate(urlRequest, request);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Void> redirect(@PathVariable String id) {
-        var url = urlServices.getOriginUrl(id);
+        Url url = urlServices.getOriginUrl(id);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(url.get().getOriginUrl()));
+        headers.setLocation(URI.create(url.getOriginUrl()));
         return ResponseEntity.status(HttpStatus.FOUND).headers(headers).build();
     }
 }

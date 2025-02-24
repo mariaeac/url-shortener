@@ -9,10 +9,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.Optional;
+
 
 @Service
 public class UrlServices {
@@ -29,17 +27,17 @@ public class UrlServices {
             urlId = RandomStringUtils.randomAlphanumeric(5, 10);
         } while (urlRepository.existsById(urlId));
 
-        urlRepository.save(new Url(urlId, urlRequest.url(), LocalDateTime.now().plusMinutes(1)));
+        urlRepository.save(new Url(urlId, urlRequest.url(), LocalDateTime.now().plusMinutes(1), 0L));
 
         var redirectUrl = httpServletRequest.getRequestURL().toString().replace("shorten-url", urlId);
         return new UrlResponse(redirectUrl);
     }
 
-    public Optional<Url> getOriginUrl(String  urlId) {
-        Optional<Url> url = urlRepository.findById(urlId);
-        if (url.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+    public Url getOriginUrl(String  urlId) {
+        Url url = urlRepository.findById(urlId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        url.setClickCount(url.getClickCount() + 1);
+        urlRepository.save(url);
         return url;
     }
 
