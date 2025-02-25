@@ -5,7 +5,8 @@ import com.meac.url_shortener.entities.dtos.UrlRequest;
 import com.meac.url_shortener.entities.dtos.UrlResponse;
 import com.meac.url_shortener.repository.UrlRepository;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.text.CharacterPredicates;
+import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,9 +23,13 @@ public class UrlServices {
 
     public UrlResponse urlShortenerGenerate(UrlRequest urlRequest, HttpServletRequest httpServletRequest) {
 
-       String urlId;
+        RandomStringGenerator generator = new RandomStringGenerator.Builder()
+                .withinRange('0', 'z')
+                .filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS)
+                .build();
+        String urlId;
         do {
-            urlId = RandomStringUtils.randomAlphanumeric(5, 10);
+            urlId = generator.generate(5, 10);
         } while (urlRepository.existsById(urlId));
 
         urlRepository.save(new Url(urlId, urlRequest.url(), LocalDateTime.now().plusMinutes(1), 0L));
