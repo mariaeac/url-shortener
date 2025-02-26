@@ -33,7 +33,7 @@ public class UrlServices {
             urlId = generator.generate(5, 10);
         } while (urlRepository.existsById(urlId));
 
-        Url url = urlRepository.save(new Url(urlId, urlRequest.url(), LocalDateTime.now().plusMinutes(1), 0L));
+        Url url = urlRepository.save(new Url(urlId, urlRequest.url(), LocalDateTime.now().plusMinutes(1), 0L, null));
 
         var redirectUrl = httpServletRequest.getRequestURL().toString().replace("shorten-url", urlId);
         return new UrlResponse(redirectUrl, url.getClickCount());

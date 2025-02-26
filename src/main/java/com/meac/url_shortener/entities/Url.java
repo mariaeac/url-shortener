@@ -1,5 +1,6 @@
 package com.meac.url_shortener.entities;
 
+import org.hibernate.validator.constraints.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,15 +19,26 @@ public class Url {
 
     private Long clickCount;
 
+    private UUID userId;
+
     public Url() {
 
     }
 
-    public Url(String id, String originUrl, LocalDateTime expiresAt, Long clickCount) {
+    public Url(String id, String originUrl, LocalDateTime expiresAt, Long clickCount, UUID userId) {
         this.id = id;
         this.originUrl = originUrl;
         this.expiresAt = expiresAt;
         this.clickCount = clickCount;
+        this.userId = userId;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public String getId() {

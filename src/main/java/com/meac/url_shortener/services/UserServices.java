@@ -1,0 +1,26 @@
+package com.meac.url_shortener.services;
+
+import com.meac.url_shortener.entities.User;
+import com.meac.url_shortener.entities.dtos.UserRegisterDTO;
+import com.meac.url_shortener.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.UUID;
+
+@Service
+public class UserServices {
+
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bcryptPasswordEncoder;
+
+    public UserServices(UserRepository userRepository, BCryptPasswordEncoder bcryptPasswordEncoder) {
+        this.userRepository = userRepository;
+        this.bcryptPasswordEncoder = bcryptPasswordEncoder;
+    }
+
+    public void register(UserRegisterDTO userRegister) {
+        User user = new User(UUID.randomUUID(), userRegister.username(),userRegister.email(), bcryptPasswordEncoder.encode(userRegister.password()));
+        userRepository.save(user);
+    }
+}
