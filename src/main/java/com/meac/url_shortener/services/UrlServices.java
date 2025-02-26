@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
@@ -32,18 +33,23 @@ public class UrlServices {
             urlId = generator.generate(5, 10);
         } while (urlRepository.existsById(urlId));
 
-        urlRepository.save(new Url(urlId, urlRequest.url(), LocalDateTime.now().plusMinutes(1), 0L));
+        Url url = urlRepository.save(new Url(urlId, urlRequest.url(), LocalDateTime.now().plusMinutes(1), 0L));
 
         var redirectUrl = httpServletRequest.getRequestURL().toString().replace("shorten-url", urlId);
-        return new UrlResponse(redirectUrl);
+        return new UrlResponse(redirectUrl, url.getClickCount());
     }
 
     public Url getOriginUrl(String  urlId) {
         Url url = urlRepository.findById(urlId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
         url.setClickCount(url.getClickCount() + 1);
         urlRepository.save(url);
         return url;
+    }
+
+    public Long getUrlClicks(String urlId) {
+        Url url = urlRepository.findById(urlId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return  url.getClickCount();
+
     }
 
 }

@@ -1,4 +1,4 @@
 package com.meac.url_shortener.entities.dtos;
 
-public record UrlResponse(String url) {
+public record UrlResponse(String url, Long clickCounter) {
 }

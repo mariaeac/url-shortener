@@ -45,11 +45,21 @@ function showResult(shortUrl) {
     const RESULT_DIV = document.getElementById('result');
 
 
+    getClicksCount(shortUrl);
+
     SHORT_URL_ELEMENT.textContent = shortUrl;
     SHORT_URL_ELEMENT.href = shortUrl;
     RESULT_DIV.style.display = 'block';
 
 }
+
+async function getClicksCount(shortUrl) {
+    updateInterval = setInterval(async () => {
+        const response = await fetch(`${shortUrl}/clicks`);
+        document.getElementById('clickCount').textContent =   await response.json();
+    }, 5000);
+}
+
 
 async function copyURLToClipboard() {
     const SHORT_URL_ELEMENT = document.getElementById('short-url');

@@ -3,6 +3,7 @@ package com.meac.url_shortener.controller;
 import com.meac.url_shortener.entities.Url;
 import com.meac.url_shortener.entities.dtos.UrlRequest;
 import com.meac.url_shortener.entities.dtos.UrlResponse;
+
 import com.meac.url_shortener.services.UrlServices;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -36,4 +37,12 @@ public class UrlController {
         headers.setLocation(URI.create(url.getOriginUrl()));
         return ResponseEntity.status(HttpStatus.FOUND).headers(headers).build();
     }
+
+    @GetMapping("/{url}/clicks")
+    public ResponseEntity<Long> clicks(@PathVariable String url) {
+        Long clickCounter =   urlServices.getUrlClicks(url);
+        return ResponseEntity.ok(clickCounter);
+    }
+
+
 }
