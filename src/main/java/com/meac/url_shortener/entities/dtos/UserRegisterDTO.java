@@ -1,4 +1,9 @@
 package com.meac.url_shortener.entities.dtos;
 
-public record UserRegisterDTO(String username, String email, String password ){
+import jakarta.validation.constraints.NotBlank;
+
+public record UserRegisterDTO(
+        @NotBlank String username,
+        @NotBlank String email,
+        @NotBlank String password ){
 }

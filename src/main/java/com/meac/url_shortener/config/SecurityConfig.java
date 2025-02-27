@@ -19,7 +19,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/shorten-url", "api/auth/register").permitAll()
+                .requestMatchers("/api/shorten-url", "/**", "api/auth/register", "api/auth/login").permitAll()
                 .anyRequest().authenticated())
                 .csrf(crsf -> crsf.disable());
 

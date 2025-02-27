@@ -3,17 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro e Login</title>
+    <title>Cadastro</title>
 </head>
 <link rel="stylesheet" href="form.css">
 <body>
 
 <div class="auth-container">
     <div class="tabs">
-
-
+        <button class="tab active" onclick="switchTab('login')"> Login </button>
+        <button class="tab" onclick="switchTab('register')"> Cadastro </button>
     </div>
 
+    <!-- Login -->
+    <form id="loginForm" class="form active">
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" id="loginEmail" required>
+        </div>
+        <div class="form-group">
+            <label>Senha:</label>
+            <input type="password" id="loginPassword" required>
+        </div>
+        <button type="submit">Entrar</button>
+        <div class="message" id="loginMessage"></div>
+    </form>
 
     <!-- Cadastro -->
     <form id="registerForm" class="form">
@@ -41,6 +54,8 @@
         <div class="message" id="registerMessage"></div>
 
     </form>
+
+
 </div>
 </div>
 <script src="script.js"> </script>
