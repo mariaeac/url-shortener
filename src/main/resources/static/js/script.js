@@ -125,7 +125,7 @@ function setupLoginForm() {
             });
 
             if (response.status === 202) {
-                showRegisterMessage(messageElement, 'Login realizado!', 'success');
+                showRegisterMessage(loginMessage, 'Login realizado!', 'success');
                 loginForm.reset();
             } else {
                 const errorData = await response.json();
@@ -135,9 +135,9 @@ function setupLoginForm() {
 
         } catch (error) {
             if (error instanceof SyntaxError) {
-                showRegisterMessage(messageElement, 'Resposta inválida do servidor', 'error');
+                showRegisterMessage(loginMessage, 'Resposta inválida do servidor', 'error');
             } else {
-                showRegisterMessage(messageElement, error.message || 'Erro de conexão', 'error');
+                showRegisterMessage(loginMessage, error.message || 'Erro de conexão', 'error');
             }
             console.error('Erro detalhado:', error);
         }

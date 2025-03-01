@@ -1,8 +1,8 @@
 package com.meac.url_shortener.controller;
 
-import com.meac.url_shortener.entities.dtos.UserLoginDTO;
-import com.meac.url_shortener.entities.dtos.UserRegisterDTO;
+import com.meac.url_shortener.entities.dtos.*;
 import com.meac.url_shortener.services.UserServices;
+
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +27,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody UserLoginDTO userLogin) {
+    public ResponseEntity<TokenResponseDTO> login(@RequestBody UserLoginDTO userLogin) {
+        TokenResponseDTO response = userServices.login(userLogin);
 
-        userServices.login(userLogin);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
     }
+
 }

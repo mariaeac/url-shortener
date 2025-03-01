@@ -39,6 +39,7 @@ public class UrlServices {
         return new UrlResponse(redirectUrl, url.getClickCount());
     }
 
+
     public Url getOriginUrl(String  urlId) {
         Url url = urlRepository.findById(urlId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         url.setClickCount(url.getClickCount() + 1);
