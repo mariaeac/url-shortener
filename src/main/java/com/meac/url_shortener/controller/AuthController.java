@@ -43,10 +43,21 @@ public class AuthController {
         jwtCookie.setMaxAge(Math.toIntExact(tokenExpirationTime));
         jwtCookie.setHttpOnly(true);
         jwtCookie.setSecure(false);
-        response.addCookie(jwtCookie);
-
+        response.addCookie(jwtCookie)
 
         return ResponseEntity.status(HttpStatus.OK).body(DTOResponse);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("JWT", null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false);
+        response.addCookie(cookie);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 
 }

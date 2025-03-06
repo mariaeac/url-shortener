@@ -12,6 +12,8 @@ public class DashboardController {
     @GetMapping("/dashboard")
     public void redirectToDashboard(HttpServletResponse response) throws IOException {
         response.sendRedirect("/dashboard.html");
+
     }
+
 
 }
