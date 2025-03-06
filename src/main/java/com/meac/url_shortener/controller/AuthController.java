@@ -3,7 +3,10 @@ package com.meac.url_shortener.controller;
 import com.meac.url_shortener.entities.dtos.*;
 import com.meac.url_shortener.services.UserServices;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private UserServices userServices;
 
+    @Value("${jwt.expiration.time}")
+    private Long tokenExpirationTime;
+
     public AuthController(UserServices userServices) {
         this.userServices = userServices;
     }
@@ -27,10 +33,20 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponseDTO> login(@RequestBody UserLoginDTO userLogin) {
-        TokenResponseDTO response = userServices.login(userLogin);
+    public ResponseEntity<TokenResponseDTO> login(@RequestBody UserLoginDTO userLogin, HttpServletResponse response) {
+        TokenResponseDTO DTOResponse = userServices.login(userLogin);
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
+
+        // cookie HTTPOnly e secure
+        Cookie jwtCookie = new Cookie("JWT", DTOResponse.jwtToken());
+        jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(Math.toIntExact(tokenExpirationTime));
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setSecure(false);
+        response.addCookie(jwtCookie);
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(DTOResponse);
     }
 
 }

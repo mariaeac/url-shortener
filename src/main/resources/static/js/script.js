@@ -101,9 +101,11 @@
                     })
                 });
 
-                if (response.status == 202) {
-                    showMessage('loginMessage', 'Login realizado!', 'success');
-                    loginForm.reset();
+
+                if (response.ok) {
+
+                    window.location.href = '/dashboard';
+
                 } else {
                     const errorData = await response.json();
                     throw new Error(errorData.message || 'Erro no login');

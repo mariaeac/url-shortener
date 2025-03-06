@@ -14,7 +14,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
@@ -35,34 +38,35 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/{id}",
-                                "/api/auth/login",
-                                "/api/auth/register",
-                                "/api/shorten-url",
+                                "/api/auth/**",
                                 "/",
-                                "/api/redirect/",
                                 "/index.html",
-                                "/form.html"
+                                "/form.html",
+                                "/redirect"
                         ).permitAll()
-
-
-                        .requestMatchers(HttpMethod.POST, "/api/users/url").authenticated()
-
                         .requestMatchers(
                                 "/css/**",
                                 "/js/**",
-                                "/images/**",
-                                "/favicon.ico"
+                                "/images/**"
                         ).permitAll()
+                        .requestMatchers("/dashboard.html").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/users/url").authenticated()
                         .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()
 
-                        )
-                );
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(Customizer.withDefaults())
+                        .bearerTokenResolver((bearerTokenResolver()) // Usa o resolver de cookie
+                ));
 
         return http.build();
     }
 
+
+    @Bean
+    public BearerTokenResolver bearerTokenResolver() {
+        return new CookieTokenResolver();
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -80,8 +84,6 @@ public class SecurityConfig {
     public JwtDecoder jwtDecoder () {
         return NimbusJwtDecoder.withPublicKey(publicKey).build();
     }
-
-
 
 
 
