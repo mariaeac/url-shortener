@@ -40,7 +40,7 @@ public class UserServices {
     }
 
     public TokenResponseDTO login(@Valid UserLoginDTO userLogin) {
-        User user = userRepository.findByEmail(userLogin.email()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        User user = userRepository.findByEmail(userLogin.email()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhum usuário encontrado com esse e-mail!"));
 
         if (!validateLoginCredentials(userLogin, user)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
@@ -65,4 +65,6 @@ public class UserServices {
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
+
+  
 }

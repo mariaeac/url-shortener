@@ -43,7 +43,7 @@ public class AuthController {
         jwtCookie.setMaxAge(Math.toIntExact(tokenExpirationTime));
         jwtCookie.setHttpOnly(true);
         jwtCookie.setSecure(false);
-        response.addCookie(jwtCookie)
+        response.addCookie(jwtCookie);
 
         return ResponseEntity.status(HttpStatus.OK).body(DTOResponse);
     }
