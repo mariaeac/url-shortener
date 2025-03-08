@@ -68,8 +68,16 @@ public class AuthUserUrlServices {
             return null;
         }
 
+        for (Url url : urls) {
+            String urlId = url.getId();
+            String shortUrlPath = "http://localhost:9090/api/" + urlId;
+            url.setId(shortUrlPath);
+        }
+
         List<UsersURLResponseDTO> response = urls.stream()
                 .map(url -> new UsersURLResponseDTO(url.getOriginUrl(), url.getId(), url.getExpiresAt(), url.getClickCount())).toList();
+
+
 
         return response;
 
