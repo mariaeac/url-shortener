@@ -49,7 +49,14 @@ public class AuthUserUrlServices {
         } while (urlRepository.existsById(urlId));
 
         Url url = urlRepository.save(new Url(urlId, urlRequest.url(), LocalDateTime.now().plusMinutes(1), 0L, user.get().getId()));
-        var redirectUrl = httpServletRequest.getRequestURL().toString().replace("urls", urlId);
+
+        String baseUrl = httpServletRequest.getRequestURL().toString().replace(httpServletRequest.getRequestURI(), "");
+
+        if (!baseUrl.endsWith("/")) {
+            baseUrl += "/";
+        }
+
+        String redirectUrl = baseUrl + "api/" + urlId;
         return new UrlResponse(redirectUrl, url.getClickCount());
 
     }

@@ -100,7 +100,7 @@
 
     function renderUrls(urls) {
         const tbody = document.querySelector('#linksTable tbody');
-        tbody.innerHTML = ''; 
+        tbody.innerHTML = '';
 
         urls.forEach(url => {
             const row = document.createElement('tr');
