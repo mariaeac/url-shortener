@@ -102,6 +102,26 @@
         };
     }
 
+    function formatTimeRemaining(expiresAt) {
+        const now = new Date();
+        const expiration = new Date(expiresAt);
+        const diffInMilliseconds = expiration - now;
+
+        const seconds = Math.floor(diffInMilliseconds / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+
+        const parts = [];
+        if (days > 0) parts.push(`${days}d`);
+        if (hours % 24 > 0) parts.push(`${hours % 24}h`);
+        if (minutes % 60 > 0) parts.push(`${minutes % 60}m`);
+        if (seconds % 60 > 0) parts.push(`${seconds % 60}s`);
+
+        return parts.join(" ") + " restantes";
+
+    }
+
 
     function renderUrls(urls) {
         const tbody = document.querySelector('#linksTable tbody');
@@ -122,9 +142,13 @@
             shortUrlLink.target = '_blank';
             shortUrlCell.appendChild(shortUrlLink);
 
+            const expiresAtCell = document.createElement('td');
+            expiresAtCell.className = 'expires-at';
+            expiresAtCell.dataset.expiration = url.expiresAt;
+            updateTimeRemaining(expiresAtCell);
 
             const clicksCell = document.createElement('td');
-            clicksCell.textContent = url.expiresAt;
+            clicksCell.textContent = url.clicksCount;
 
 
             const actionsCell = document.createElement('td');
@@ -139,14 +163,24 @@
 
             row.appendChild(originalUrlCell);
             row.appendChild(shortUrlCell);
+            row.appendChild(expiresAtCell);
             row.appendChild(clicksCell);
             row.appendChild(actionsCell);
 
             tbody.appendChild(row);
+
+            setInterval(() => {
+                document.querySelectorAll('.expires-at').forEach(updateTimeRemaining);
+            }, 1000);
+
         });
+
     }
 
-
+    function updateTimeRemaining(element) {
+        const expiration = element.dataset.expiration;
+        element.textContent = formatTimeRemaining(expiration);
+    }
 
 
     async function logout() {
