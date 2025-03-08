@@ -1,6 +1,7 @@
 package com.meac.url_shortener.services;
 
 import com.meac.url_shortener.entities.User;
+import com.meac.url_shortener.entities.dtos.ResponseUserDTO;
 import com.meac.url_shortener.entities.dtos.TokenResponseDTO;
 import com.meac.url_shortener.entities.dtos.UserLoginDTO;
 import com.meac.url_shortener.entities.dtos.UserRegisterDTO;
@@ -66,5 +67,9 @@ public class UserServices {
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 
-  
+    public ResponseUserDTO getUserInfo(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return new ResponseUserDTO(user.getUsername());
+    }
+
 }

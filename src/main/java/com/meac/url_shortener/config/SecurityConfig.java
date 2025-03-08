@@ -51,6 +51,9 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers("/dashboard.html").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/users/url").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/users/url").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/users/info").authenticated()
+
                         .anyRequest().authenticated()
                 )
 

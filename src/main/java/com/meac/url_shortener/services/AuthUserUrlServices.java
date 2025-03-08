@@ -4,6 +4,7 @@ import com.meac.url_shortener.entities.Url;
 import com.meac.url_shortener.entities.User;
 import com.meac.url_shortener.entities.dtos.UrlRequest;
 import com.meac.url_shortener.entities.dtos.UrlResponse;
+import com.meac.url_shortener.entities.dtos.UsersURLResponseDTO;
 import com.meac.url_shortener.repository.UrlRepository;
 import com.meac.url_shortener.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,10 +31,9 @@ public class AuthUserUrlServices {
         this.userRepository = userRepository;
     }
 
-    public UrlResponse urlShortGenerate(UrlRequest urlRequest, HttpServletRequest httpServletRequest, JwtAuthenticationToken jwtToken) {
+    public UrlResponse urlShortGenerate(UrlRequest urlRequest, HttpServletRequest httpServletRequest, UUID userId) {
 
-        String userId = jwtToken.getName();
-        Optional<User> user = userRepository.findById(UUID.fromString(userId));
+        Optional<User> user = userRepository.findById(userId);
         if (!user.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
@@ -53,6 +54,22 @@ public class AuthUserUrlServices {
 
     }
 
-    public
+    public List<UsersURLResponseDTO> getUrlsFromUser(UUID userId) {
+        List<Url> urls = urlRepository.findByUserId(userId);
+
+        if (urls.isEmpty()) {
+            return null;
+        }
+
+        List<UsersURLResponseDTO> response = urls.stream()
+                .map(url -> new UsersURLResponseDTO(url.getOriginUrl(), url.getId(), url.getExpiresAt(), url.getClickCount())).toList();
+
+        return response;
+
+    }
+
+
+
+
 
 }
