@@ -6,7 +6,7 @@
     const URL_INPUT = document.getElementById('url-input');
     const SHORT_URL_INPUT = document.getElementById('shortened-url');
     const RESULT_SECTION = document.getElementById('result-section');
-    const COPY_BUTTON = document.getElementById('copy-btn');
+    const COPY_BUTTON = document.getElementById('copyBtn');
 
     async function loadUserInfo() {
         try {
@@ -88,7 +88,12 @@
         COPY_BUTTON.onclick = () => {
             navigator.clipboard.writeText(shortUrl)
                 .then(() => {
+
                     COPY_BUTTON.innerHTML = `<i class="fas fa-check"></i> Copiado!`;
+
+
+                    void COPY_BUTTON.offsetWidth;
+
                     setTimeout(() => {
                         COPY_BUTTON.innerHTML = `<i class="fas fa-copy"></i> Copiar`;
                     }, 2000);
