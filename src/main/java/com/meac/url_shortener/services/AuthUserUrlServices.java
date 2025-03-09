@@ -48,13 +48,17 @@ public class AuthUserUrlServices {
             urlId = generator.generate(5, 10);
         } while (urlRepository.existsById(urlId));
 
-        Url url = urlRepository.save(new Url(urlId, urlRequest.url(), LocalDateTime.now().plusMinutes(1), 0L, user.get().getId()));
+
+        LocalDateTime expirationTime = urlRequest.expiration() > 0 ? LocalDateTime.now().plusSeconds(urlRequest.expiration()) : LocalDateTime.now().plusYears(100);
+
+        Url url = urlRepository.save(new Url(urlId, urlRequest.url(), expirationTime, 0L, user.get().getId()));
 
         String baseUrl = httpServletRequest.getRequestURL().toString().replace(httpServletRequest.getRequestURI(), "");
 
         if (!baseUrl.endsWith("/")) {
             baseUrl += "/";
         }
+
 
         String redirectUrl = baseUrl + "api/" + urlId;
         return new UrlResponse(redirectUrl, url.getClickCount());

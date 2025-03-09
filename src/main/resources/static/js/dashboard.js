@@ -28,7 +28,9 @@
 
     async function shortenUrl() {
         const longUrl = URL_INPUT.value.trim();
+        const expirationSeconds = parseInt(document.getElementById('expiration-select').value);
 
+        debugger;
         if (!longUrl || !isValidURL(longUrl)) {
             // TODO: Substituir depois por um método para mostrar as mensagens de erro corretamente.
             throw new Error('Por favor, insira uma URL válida!');
@@ -43,7 +45,8 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    url: longUrl
+                    url: longUrl,
+                    expiration: expirationSeconds
                 })
             })
 
@@ -107,18 +110,26 @@
         const expiration = new Date(expiresAt);
         const diffInMilliseconds = expiration - now;
 
-        const seconds = Math.floor(diffInMilliseconds / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const hours = Math.floor(minutes / 60);
-        const days = Math.floor(hours / 24);
 
+        if (diffInMilliseconds <= 0) {
+            return "Expirada";
+        }
+
+
+        const totalSeconds = Math.floor(diffInMilliseconds / 1000);
+        const days = Math.floor(totalSeconds / (3600 * 24));
+        const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        // Formatação condicional
         const parts = [];
         if (days > 0) parts.push(`${days}d`);
-        if (hours % 24 > 0) parts.push(`${hours % 24}h`);
-        if (minutes % 60 > 0) parts.push(`${minutes % 60}m`);
-        if (seconds % 60 > 0) parts.push(`${seconds % 60}s`);
+        if (hours > 0) parts.push(`${hours}h`);
+        if (minutes > 0) parts.push(`${minutes}m`);
+        if (seconds > 0 || parts.length === 0) parts.push(`${seconds}s`);
 
-        return parts.join(" ") + " restantes";
+        return parts.join(" ");
 
     }
 
@@ -145,6 +156,7 @@
             const expiresAtCell = document.createElement('td');
             expiresAtCell.className = 'expires-at';
             expiresAtCell.dataset.expiration = url.expiresAt;
+            debugger
             updateTimeRemaining(expiresAtCell);
 
             const clicksCell = document.createElement('td');
