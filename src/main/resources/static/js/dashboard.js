@@ -58,6 +58,10 @@
             const data = await response.json();
             showResult(data.url);
 
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+
         } catch (error) {
             // TODO: Substituir depois por um método para mostrar as mensagens de erro corretamente.
             console.log('Error: ', error);
@@ -122,7 +126,6 @@
         const minutes = Math.floor((totalSeconds % 3600) / 60);
         const seconds = totalSeconds % 60;
 
-        // Formatação condicional
         const parts = [];
         if (days > 0) parts.push(`${days}d`);
         if (hours > 0) parts.push(`${hours}h`);
@@ -137,6 +140,7 @@
     function renderUrls(urls) {
         const tbody = document.querySelector('#linksTable tbody');
         tbody.innerHTML = '';
+
 
         urls.forEach(url => {
             const row = document.createElement('tr');
@@ -153,11 +157,12 @@
             shortUrlLink.target = '_blank';
             shortUrlCell.appendChild(shortUrlLink);
 
+
             const expiresAtCell = document.createElement('td');
             expiresAtCell.className = 'expires-at';
             expiresAtCell.dataset.expiration = url.expiresAt;
-            debugger
             updateTimeRemaining(expiresAtCell);
+
 
             const clicksCell = document.createElement('td');
             clicksCell.textContent = url.clicksCount;
@@ -167,26 +172,63 @@
             const deleteBtn = document.createElement('button');
             deleteBtn.textContent = 'Excluir';
             deleteBtn.className = 'delete-btn';
-            deleteBtn.dataset.urlId = url.id;
-            deleteBtn.onclick = () => deleteUrl(url.id);
+            deleteBtn.dataset.urlId = url.shortUrl;
+
+            deleteBtn.addEventListener('click', async () => {
+                const confirmDelete = confirm('Tem certeza que deseja excluir esta URL?');
+                if (confirmDelete) {
+                    await deleteUrl(url.shortUrl);
+                }
+            });
 
             actionsCell.appendChild(deleteBtn);
 
 
-            row.appendChild(originalUrlCell);
-            row.appendChild(shortUrlCell);
-            row.appendChild(expiresAtCell);
-            row.appendChild(clicksCell);
-            row.appendChild(actionsCell);
+            row.append(
+                originalUrlCell,
+                shortUrlCell,
+                expiresAtCell,
+                clicksCell,
+                actionsCell
+            );
 
             tbody.appendChild(row);
-
-            setInterval(() => {
-                document.querySelectorAll('.expires-at').forEach(updateTimeRemaining);
-            }, 1000);
-
         });
 
+
+        setInterval(() => {
+            document.querySelectorAll('.expires-at').forEach(updateTimeRemaining);
+        }, 1000);
+    }
+
+
+
+
+    async function deleteUrl(url) {
+
+        let urlId = extractShortCode(url);
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/users/urls/${urlId}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Erro ao excluir URL');
+            }
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+
+
+
+        } catch (error) {
+            console.error('Erro ao excluir URL:', error);
+            alert(error.message || 'Não foi possível excluir a URL');
+        }
     }
 
     function updateTimeRemaining(element) {
@@ -212,6 +254,11 @@
         }
     }
 
+    function extractShortCode(url) {
+        const match = url.match(/\/([^\/]+)\/?$/);
+        return match ? match[1] : null;
+    }
+
     function isValidURL(url) {
         try {
             new URL(url);
@@ -226,11 +273,6 @@
     document.getElementById('shortenBtn').addEventListener('click', shortenUrl);
     document.addEventListener('DOMContentLoaded', loadUserInfo);
     document.addEventListener('DOMContentLoaded', loadUserUrls);
-
-
-
-
-
 
 })();
 

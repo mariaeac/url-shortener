@@ -176,6 +176,21 @@ th {
     border-radius: 4px;
 }
 
+.delete-btn {
+    background-color: #ef4444; /* Cor de fundo vermelha */
+    color: white; /* Cor do texto branca */
+    border: none; /* Sem borda */
+    padding: 0.5rem 1rem; /* Espaçamento interno */
+    border-radius: 4px; /* Cantos arredondados */
+    cursor: pointer; /* Ponteiro do mouse ao passar sobre o botão */
+    transition: background 0.3s; /* Transição suave ao passar o mouse */
+}
+
+.delete-btn:hover {
+    background-color: #c53030; /* Cor de fundo mais escura ao passar o mouse */
+}
+
+
 
 @media (max-width: 768px) {
     .form-group {

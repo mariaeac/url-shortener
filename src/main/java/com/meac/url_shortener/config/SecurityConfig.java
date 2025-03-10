@@ -50,6 +50,7 @@ public class SecurityConfig {
                                 "/images/**"
                         ).permitAll()
                         .requestMatchers("/dashboard.html").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/urls/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/users/url").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/users/url").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/users/info").authenticated()

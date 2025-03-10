@@ -1,5 +1,16 @@
 package com.meac.url_shortener.services;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.apache.commons.text.CharacterPredicates;
+import org.apache.commons.text.RandomStringGenerator;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.meac.url_shortener.entities.Url;
 import com.meac.url_shortener.entities.User;
 import com.meac.url_shortener.entities.dtos.UrlRequest;
@@ -7,18 +18,8 @@ import com.meac.url_shortener.entities.dtos.UrlResponse;
 import com.meac.url_shortener.entities.dtos.UsersURLResponseDTO;
 import com.meac.url_shortener.repository.UrlRepository;
 import com.meac.url_shortener.repository.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
-import org.apache.commons.text.CharacterPredicates;
-import org.apache.commons.text.RandomStringGenerator;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class AuthUserUrlServices {
@@ -35,7 +36,7 @@ public class AuthUserUrlServices {
 
         Optional<User> user = userRepository.findById(userId);
         if (!user.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado");
         }
 
         RandomStringGenerator generator = new RandomStringGenerator.Builder()
@@ -87,8 +88,19 @@ public class AuthUserUrlServices {
 
     }
 
+    public void deleteUrlById(String urlId, UUID userId) {
 
+        Optional<Url> url = urlRepository.findById(urlId);
+        
+        if (url.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "URL não encontrada");
+        }
 
+        if (!url.get().getUserId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para apagar esta URL");
+        }
 
+        urlRepository.deleteById(urlId);
+    }
 
 }

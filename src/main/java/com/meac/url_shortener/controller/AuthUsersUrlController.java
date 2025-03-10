@@ -48,6 +48,15 @@ public class AuthUsersUrlController {
 
     }
 
+    @DeleteMapping("/urls/{urlId}")
+    public ResponseEntity<?> deleteUrl(@PathVariable String urlId, @AuthenticationPrincipal Jwt jwt) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        authUserUrlServices.deleteUrlById(urlId, userId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+
     @GetMapping("/info")
     public ResponseEntity<ResponseUserDTO> getUserInfo(@AuthenticationPrincipal Jwt jwtToken) {
 
