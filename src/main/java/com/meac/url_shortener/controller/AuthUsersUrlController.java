@@ -6,6 +6,8 @@ import com.meac.url_shortener.entities.dtos.UrlResponse;
 import com.meac.url_shortener.entities.dtos.UsersURLResponseDTO;
 import com.meac.url_shortener.services.AuthUserUrlServices;
 import com.meac.url_shortener.services.UserServices;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
@@ -20,6 +22,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
+@Tag(name = "usuários autenticados", description = "Endpoints de ações de URLS para usuários autenticados")
 public class AuthUsersUrlController {
 
     private final AuthUserUrlServices authUserUrlServices;
@@ -31,7 +34,9 @@ public class AuthUsersUrlController {
         this.userServices = userServices;
     }
 
+
     @PostMapping("/urls")
+    @Operation( summary = "Encurtar url", description = "Endpoint para encurtar URL de usuário autenticado")
     public ResponseEntity<UrlResponse> shortenAuthUrl(@Valid @RequestBody UrlRequest urlRequest, HttpServletRequest request, @AuthenticationPrincipal Jwt jwtToken) {
         String userId = jwtToken.getSubject();
         UrlResponse response = authUserUrlServices.urlShortGenerate(urlRequest, request, UUID.fromString(userId));
@@ -40,6 +45,7 @@ public class AuthUsersUrlController {
     }
 
     @GetMapping("/urls")
+    @Operation( summary = "Pegar as URLS", description = "Endpoint que retorna as URLS de um determinado usuário")
     public ResponseEntity<List<UsersURLResponseDTO>> getUsersUrls(@AuthenticationPrincipal Jwt jwtToken) {
         String userId = jwtToken.getSubject();
         List<UsersURLResponseDTO> urls = authUserUrlServices.getUrlsFromUser(UUID.fromString(userId));
@@ -49,6 +55,7 @@ public class AuthUsersUrlController {
     }
 
     @DeleteMapping("/urls/{urlId}")
+    @Operation( summary = "Deletar URL", description = "Endpoint para deletar uma determinada URL")
     public ResponseEntity<?> deleteUrl(@PathVariable String urlId, @AuthenticationPrincipal Jwt jwt) {
         UUID userId = UUID.fromString(jwt.getSubject());
         authUserUrlServices.deleteUrlById(urlId, userId);
@@ -58,6 +65,7 @@ public class AuthUsersUrlController {
 
 
     @GetMapping("/info")
+    @Operation( summary = "Informações de usuário", description = "Endpoint que retorna as informações de um determinado usuário")
     public ResponseEntity<ResponseUserDTO> getUserInfo(@AuthenticationPrincipal Jwt jwtToken) {
 
         String userId = jwtToken.getSubject();
