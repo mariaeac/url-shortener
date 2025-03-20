@@ -149,14 +149,35 @@ input::placeholder {
 }
 
 .toggle-password {
-    position: absolute;
-    right: 1rem;
     background: none;
     border: none;
-    color: var(--text-light);
     cursor: pointer;
-    font-size: 0.9rem;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
 }
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon i:first-child {
+    position: absolute;
+    left: 10px;
+    color: #666;
+}
+
+.input-with-icon input {
+    padding-left: 35px;
+    padding-right: 35px;
+    width: 100%;
+}
+
+
 
 .form-options {
     display: flex;
@@ -352,7 +373,10 @@ input::placeholder {
     text-decoration: underline;
 }
 
-/* Responsive adjustments */
+
+
+
+
 @media (max-width: 500px) {
     .auth-container {
         border-radius: 0;

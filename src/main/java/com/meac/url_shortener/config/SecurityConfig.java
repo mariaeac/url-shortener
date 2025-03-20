@@ -42,7 +42,9 @@ public class SecurityConfig {
                                 "/",
                                 "/index.html",
                                 "/form.html",
-                                "/redirect"
+                                "/redirect",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/css/**",

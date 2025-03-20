@@ -82,8 +82,6 @@ public class AuthUserUrlServices {
         List<UsersURLResponseDTO> response = urls.stream()
                 .map(url -> new UsersURLResponseDTO(url.getOriginUrl(), url.getId(), url.getExpiresAt(), url.getClickCount())).toList();
 
-
-
         return response;
 
     }
